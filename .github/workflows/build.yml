@@ -1,13 +1,11 @@
-name: gobuilding
+name: build
 on:
-  push:
-    branches:
-      - gobuilding
-    paths-ignore:
-      - '**.md'
   pull_request:
-    paths-ignore:
-      - '**.md'
+    types: [ opened, synchronize, reopened ]
+  push:
+    branches: [ main ]
+  schedule:
+    - cron: 0 0 * * *
 
 jobs:
   build:
@@ -15,7 +13,8 @@ jobs:
     strategy:
       matrix:
         go: [ '1.18', '1.17' ]
-    name: Go ${{ matrix.go }} sample
+
+    name: go run ${{ matrix.go }}
     steps:
       - uses: actions/checkout@v3
       - name: Setup go
