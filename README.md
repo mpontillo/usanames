@@ -8,8 +8,8 @@ its data set.
 
 ### Example
 
-```
-$ ./build.sh
+```bash
+$ make
 $ bin/usanamegen naive --count 10
 Kylyn JENNA
 Kristofer DURRETTE
