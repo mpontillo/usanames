@@ -1,0 +1,52 @@
+name: lint
+#on:
+#  pull_request:
+#    types: [ opened, synchronize, reopened ]
+#  push:
+#    branches: [ main ]
+#  schedule:
+#    - cron: 0 0 * * *
+on:
+  push:
+    branches: [ linting ]
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        go: [ '1.18', '1.17' ]
+        golangci: [ 'latest', 'v1.47.2' ]  # https://github.com/golangci/golangci-lint/releases
+    steps:
+      - uses: actions/setup-go@v3
+        with:
+          go-version: ${{ matrix.go }}
+      - uses: actions/checkout@v3
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: ${{ matrix.golangci }}
+
+          # Optional: working directory, useful for monorepos
+          # working-directory: somedir
+
+          # Optional: golangci-lint command line arguments.
+          # args: --issues-exit-code=0
+
+          # Optional: show only new issues if it's a pull request. The default value is `false`.
+          # only-new-issues: true
+
+          # Optional: if set to true then the all caching functionality will be complete disabled,
+          #           takes precedence over all other caching options.
+          skip-cache: true
+
+          # Optional: if set to true then the action don't cache or restore ~/go/pkg.
+          skip-pkg-cache: true
+
+          # Optional: if set to true then the action don't cache or restore ~/.cache/go-build.
+          skip-build-cache: true
