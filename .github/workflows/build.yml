@@ -1,0 +1,25 @@
+name: gobuilding
+on:
+  push:
+    branches:
+      - gobuilding
+    paths-ignore:
+      - '**.md'
+  pull_request:
+    paths-ignore:
+      - '**.md'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go: [ '1.14', '1.13' ]
+    name: Go ${{ matrix.go }} sample
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ matrix.go }}
+      - run: go run cmd/usanamegen/usanamegen.go
